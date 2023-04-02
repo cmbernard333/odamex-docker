@@ -1,0 +1,32 @@
+version: '3.8'
+# use .env later
+services:
+    odamex:
+        container_name: odamex
+        image: "cmbernard333/odamex-server:10.3.0"
+        restart: always
+        network_mode: host
+        volumes:
+            - doomIWAD:/wads
+            - doomWADS:/other_wads
+            - ./configs:/configs:ro
+        command: >
+            -iwad /wads/DOOM2.WAD 
+            -waddir /other_wads
+            +exec /configs/config.ini
+            -skill 4
+            -file '/other_wads/valiant/Valiant.wad'
+            +map map11
+volumes:
+    doomIWAD:
+        driver: local
+        driver_opts:
+            o: bind
+            type: none
+            device: "${DOOM_BASE}/IWAD"
+    doomWADS:
+        driver: local
+        driver_opts:
+            o: bind
+            type: none
+            device: "${DOOM_BASE}/WADS"
